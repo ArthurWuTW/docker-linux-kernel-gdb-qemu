@@ -1,0 +1,13 @@
+version: "2.1"
+services:
+
+  autoencoder-env:
+    build:
+      context: ./image
+      args:
+        HOSTUSER: ${HOSTUSER}
+        HOSTUID: ${HOSTUID}
+        HOSTGID: ${HOSTGID}
+    user: ${HOSTUSER}:${HOSTUSER}
+    # volumes:
+    #   - /home/arthur/Desktop/docker-jupyter-autoencoder/jupyter:/home/${HOSTUSER}/jupyter:rw
