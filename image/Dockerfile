@@ -8,9 +8,15 @@ ARG HOSTGID
 
 RUN groupadd -g ${HOSTGID} ${HOSTUSER}
 RUN useradd ${HOSTUSER} -u ${HOSTUID} -g ${HOSTGID} -m
+RUN echo "${HOSTUSER}:pass" | chpasswd
 
 RUN apt-get update -y
 RUN apt-get install -y iputils-ping init wget curl git sudo vim
+RUN usermod -aG sudo ${HOSTUSER}
+RUN echo "${HOSTUSER} ALL=(ALL)  ALL" >> /etc/sudoers
+
+# Linux Kernel Env 
+RUN apt install build-essential flex bison libssl-dev libelf-dev libncurses-dev -y
 
 WORKDIR /home/${HOSTUSER}
 USER ${HOSTUSER}
