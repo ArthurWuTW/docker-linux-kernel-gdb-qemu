@@ -1,7 +1,7 @@
 version: "2.1"
 services:
 
-  autoencoder-env:
+  linux-kernel-build-env:
     build:
       context: ./image
       args:
