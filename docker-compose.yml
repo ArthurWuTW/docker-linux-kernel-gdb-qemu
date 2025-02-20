@@ -9,5 +9,5 @@ services:
         HOSTUID: ${HOSTUID}
         HOSTGID: ${HOSTGID}
     user: ${HOSTUSER}:${HOSTUSER}
-    # volumes:
-    #   - /home/arthur/Desktop/docker-jupyter-autoencoder/jupyter:/home/${HOSTUSER}/jupyter:rw
+    volumes:
+      - /home/arthur/Desktop:/home/${HOSTUSER}/Desktop:rw

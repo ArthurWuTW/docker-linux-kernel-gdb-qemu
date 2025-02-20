@@ -16,7 +16,16 @@ RUN usermod -aG sudo ${HOSTUSER}
 RUN echo "${HOSTUSER} ALL=(ALL)  ALL" >> /etc/sudoers
 
 # Linux Kernel Env 
-RUN apt install build-essential flex bison libssl-dev libelf-dev libncurses-dev -y
+RUN apt install build-essential flex bison libssl-dev libelf-dev libncurses-dev bc -y
+
+# Fix Compile Error
+# error: ‘-mindirect-branch’ and ‘-fcf-protection’ are not compatible
+RUN apt-get install gcc-8 g++-8 -y
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-8 100
+RUN update-alternatives --config gcc
+RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
+RUN update-alternatives --config g++
+
 
 WORKDIR /home/${HOSTUSER}
 USER ${HOSTUSER}
