@@ -28,6 +28,8 @@ RUN update-alternatives --config gcc
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
 RUN update-alternatives --config g++
 
+# Busybox dependencies
+RUN apt install cpio -y
 
 WORKDIR /home/${HOSTUSER}
 USER ${HOSTUSER}
@@ -73,8 +75,8 @@ RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && git clone https://github.com/mirror/busybox.git
 COPY busybox/.config /home/${HOSTUSER}/linux-5.0.1/busybox/.config
 RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/ && make -j4 && make install
-RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && mkdir proc sys dev tmp
-COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/busybox/_install
+RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && mkdir proc sys dev tmp etc
+COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/busybox/_install/init
 RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ./initramfs-busybox-x86.cpio.gz
 
 # RUN in QEMU command
