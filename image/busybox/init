@@ -1,0 +1,12 @@
+#!/bin/sh
+
+mount -t proc none /proc
+mount -t sysfs none /sys
+mount -t tmpfs none /tmp
+mount -t devtmpfs none /dev
+
+
+echo "Hello Linux"
+
+
+exec /bin/sh
