@@ -19,4 +19,8 @@ Hello Linux
 ```
 
 Run linux in gdb
-4-1. [host]
+4-1. [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init" -S -s
+4.2. ANOTHER_WINDOW [host] gdb vmlinux
+4.3. [gdb] target remote:1234
+4.4. [gdb] b start_kernel
+4.5. [gdb] c
