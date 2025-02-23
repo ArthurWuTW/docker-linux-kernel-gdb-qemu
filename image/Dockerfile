@@ -77,7 +77,8 @@ RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && mkdir proc sys dev tmp
 COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/busybox/_install
 RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ./initramfs-busybox-x86.cpio.gz
 
-
+# RUN in QEMU command
+#qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd initramfs-busybox-arm.cpio.gz -append "init=/init console=ttyS0" -S -s
 
 
 CMD ["/sbin/init"]
