@@ -20,7 +20,16 @@ Hello Linux
 
 Run linux in gdb
 4-1. [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init" -S -s
-4.2. ANOTHER_WINDOW [host] gdb vmlinux
-4.3. [gdb] target remote:1234
-4.4. [gdb] b start_kernel
-4.5. [gdb] c
+4-2. ANOTHER_WINDOW [host] gdb vmlinux
+4-3. [gdb] target remote:1234
+4-4. [gdb] b start_kernel
+4-5. [gdb] c
+
+Ping host network
+5-1 [host] sudo ip tuntap add tap0 mode tap 
+5-2 [host] sudo ip link set tap0 up
+5-3 [host] sudo ip address add 192.168.100.100/24 dev tap0
+5-4 [host] add more options in 4-1: -net nic -net tap,ifname=tap0,script=no
+5-5 [qemu linux kernel bash] ip link set eth0 up
+5-6 [qemu linux kernel bash] ip address add 192.168.100.101/24 dev eth0
+5-7 [qemu linux kernel bash] ping -c 3 192.168.100.100
