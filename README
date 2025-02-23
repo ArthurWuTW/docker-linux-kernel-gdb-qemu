@@ -3,7 +3,8 @@
 3. [container] copy /home/arthur/linux-5.0.1 to shared mount point
 
 Run linux without gdb
-4-1. [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -nographic -append "init=/init console=ttyS0"
+4-1.NO_GRAPHIC [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -nographic -append "init=/init console=ttyS0"
+4-1.QEMU_WINDOW [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init"
 
 ```
 [   46.721534]   No soundcards found.
