@@ -79,7 +79,7 @@ RUN mount -f --bind /proc /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/proc
 RUN mount -f --bind /dev /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/dev
 RUN mount -f --bind /sys /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/sys
 RUN mount -f --bind /run /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/run
-RUN chroot /home/${HOSTUSER}/linux-5.0.1/debian-rootfs /bin/bash -c 'apt install gcc python3 -y'
+RUN chroot /home/${HOSTUSER}/linux-5.0.1/debian-rootfs /bin/bash -c 'apt install gcc python3 net-tools -y'
 
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
     chown -R ${HOSTUSER}:${HOSTUSER} debian-rootfs
