@@ -79,13 +79,14 @@ RUN mount -f --bind /proc /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/proc
 RUN mount -f --bind /dev /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/dev
 RUN mount -f --bind /sys /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/sys
 RUN mount -f --bind /run /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/run
-RUN chroot /home/${HOSTUSER}/linux-5.0.1/debian-rootfs /bin/bash -c 'apt install gcc python3 net-tools -y'
+RUN chroot /home/${HOSTUSER}/linux-5.0.1/debian-rootfs /bin/bash -c 'apt install gcc python3 net-tools build-essential binutils -y'
 
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
     chown -R ${HOSTUSER}:${HOSTUSER} debian-rootfs
 
 USER ${HOSTUSER}
 COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/init
+COPY socket_server.c /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/socket_server.c
 RUN cd /home/${HOSTUSER}/linux-5.0.1/debian-rootfs && \
     find . -print0 | cpio --null -ov --format=newc | gzip -9 > ./initramfs-debian-x86.cpio.gz
 
