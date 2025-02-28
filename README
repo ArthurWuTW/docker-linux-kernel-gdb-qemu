@@ -3,8 +3,8 @@
 3. [container] copy /home/arthur/linux-5.0.1 to shared mount point
 
 Run linux without gdb
-4-1.NO_GRAPHIC [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -nographic -append "init=/init console=ttyS0"
-4-1.QEMU_WINDOW [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init"
+4-1.NO_GRAPHIC [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd debian-rootfs/initramfs-debian-x86.cpio.gz -nographic -append "init=/init console=ttyS0"
+4-1.QEMU_WINDOW [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd debian-rootfs/initramfs-debian-x86.cpio.gz -append "init=/init"
 
 ```
 [   46.721534]   No soundcards found.
@@ -19,7 +19,7 @@ Hello Linux
 ```
 
 Run linux in gdb
-4-1. [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init" -S -s -append nokaslr
+4-1. [host] qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd debian-rootfs/initramfs-debian-x86.cpio.gz -append "init=/init" -S -s -append nokaslr
 4-2. ANOTHER_WINDOW [host] gdb vmlinux
 4-3. [gdb] target remote:1234
 4-4. [gdb] b start_kernel
@@ -31,7 +31,7 @@ Ping host network
 5-3 [host] sudo ip address add 192.168.100.100/24 dev tap0
 5-4 [host] add more options in 4-1: -net nic -net tap,ifname=tap0,script=no
 ``` full command 
-qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd busybox/_install/initramfs-busybox-x86.cpio.gz -append "init=/init" -net nic -net tap,ifname=tap0,script=no -S -s -append nokaslr
+qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd debian-rootfs/initramfs-debian-x86.cpio.gz -append "init=/init" -net nic -net tap,ifname=tap0,script=no -S -s -append nokaslr
 
 ```
 5-5 [qemu linux kernel bash] ip link set eth0 up

@@ -8,5 +8,5 @@ mount -t devtmpfs none /dev
 
 echo "Hello Linux"
 
-
-exec /bin/sh
+export PATH=/usr/local/gcc/bin:$PATH
+exec /bin/bash

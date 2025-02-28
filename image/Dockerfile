@@ -28,8 +28,8 @@ RUN update-alternatives --config gcc
 RUN update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-8 100
 RUN update-alternatives --config g++
 
-# Busybox dependencies
-RUN apt install cpio -y
+# Debian rootfs dependencies
+RUN apt install cpio debootstrap -y
 
 WORKDIR /home/${HOSTUSER}
 USER ${HOSTUSER}
@@ -68,19 +68,27 @@ RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
 #             <*> 802.1d Ethernet Bridging
 ##################################################################
 COPY .config /home/${HOSTUSER}/linux-5.0.1/.config
-
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
     make -j4
 
-RUN cd /home/${HOSTUSER}/linux-5.0.1 && git clone https://github.com/mirror/busybox.git
-COPY busybox/.config /home/${HOSTUSER}/linux-5.0.1/busybox/.config
-RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/ && make -j4 && make install
-RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && mkdir proc sys dev tmp etc
-COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/busybox/_install/init
-RUN cd /home/${HOSTUSER}/linux-5.0.1/busybox/_install && find . -print0 | cpio --null -ov --format=newc | gzip -9 > ./initramfs-busybox-x86.cpio.gz
+USER root
+RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
+    debootstrap --arch=amd64 bookworm debian-rootfs http://deb.debian.org/debian/
+RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
+    chown -R ${HOSTUSER}:${HOSTUSER} debian-rootfs
 
-# RUN in QEMU command
-#qemu-system-x86_64 -m 4096 -kernel arch/x86/boot/bzImage -initrd initramfs-busybox-arm.cpio.gz -append "init=/init console=ttyS0" -S -s
+
+
+USER ${HOSTUSER}
+COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/init
+RUN cd /home/${HOSTUSER}/linux-5.0.1/debian-rootfs && \
+    find . -print0 | cpio --null -ov --format=newc | gzip -9 > ./initramfs-debian-x86.cpio.gz
 
 
 CMD ["/sbin/init"]
+
+# 71  sudo mount -f --bind /proc ./proc
+# 73  sudo mount -f --bind /dev ./dev
+# 74  sudo mount -f --bind /sys ./sys
+# 75  sudo mount -f --bind /run ./run
+# 103  sudo chroot ./ /bin/bash -c 'apt install gcc python3 -y'
