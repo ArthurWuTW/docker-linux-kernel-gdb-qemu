@@ -74,10 +74,15 @@ RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
 USER root
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
     debootstrap --arch=amd64 bookworm debian-rootfs http://deb.debian.org/debian/
+
+RUN mount -f --bind /proc /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/proc
+RUN mount -f --bind /dev /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/dev
+RUN mount -f --bind /sys /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/sys
+RUN mount -f --bind /run /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/run
+RUN chroot /home/${HOSTUSER}/linux-5.0.1/debian-rootfs /bin/bash -c 'apt install gcc python3 -y'
+
 RUN cd /home/${HOSTUSER}/linux-5.0.1 && \
     chown -R ${HOSTUSER}:${HOSTUSER} debian-rootfs
-
-
 
 USER ${HOSTUSER}
 COPY busybox/init /home/${HOSTUSER}/linux-5.0.1/debian-rootfs/init
@@ -86,9 +91,3 @@ RUN cd /home/${HOSTUSER}/linux-5.0.1/debian-rootfs && \
 
 
 CMD ["/sbin/init"]
-
-# 71  sudo mount -f --bind /proc ./proc
-# 73  sudo mount -f --bind /dev ./dev
-# 74  sudo mount -f --bind /sys ./sys
-# 75  sudo mount -f --bind /run ./run
-# 103  sudo chroot ./ /bin/bash -c 'apt install gcc python3 -y'
